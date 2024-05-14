@@ -24,9 +24,19 @@
 		<NeutralLanguage>en</NeutralLanguage>
 		<IncludeSymbols>True</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<PackageId>$(AssemblyName)-MAUI</PackageId>
+		<PackageProjectUrl>https://github.com/Jon2G/MAUI-FlipView</PackageProjectUrl>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<Description>A ContentView with a customizable flip animation.
+Insipired by Expander Control and https://github.com/devcrux/Flip-Animation-in-Xamarin.Forms</Description>
+		<Copyright>none</Copyright>
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Include="..\LICENSE">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	  <None Include="..\README.md">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>

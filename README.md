@@ -2,7 +2,10 @@ FlipView for MAUI
 
 A ContentView with a customizable flip animation.
 
-![Sample](sample.gif)
+[![NuGet version (FlipView-MAUI)](https://img.shields.io/nuget/v/FlipView-MAUI.svg?style=flat-square)](https://www.nuget.org/packages/FlipView-MAUI/)
+
+
+![Sample](https://raw.githubusercontent.com/Jon2G/MAUI-FlipView/main/sample.gif)
 
 Usage:
 ```
