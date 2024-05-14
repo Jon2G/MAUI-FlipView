@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:flipView="clr-namespace:FlipView;assembly=FlipView"
+             xmlns:flipViewTest="clr-namespace:FlipViewTest"
+             x:Class="FlipViewTest.MainPage" Title="Sample"
+             x:DataType="flipViewTest:MainPageViewModel">
+    <ContentPage.BindingContext>
+        <flipViewTest:MainPageViewModel/>
+    </ContentPage.BindingContext>
+    <ScrollView Padding="20">
+        <Grid RowDefinitions="1*,1*,1*,Auto" >
+            <VerticalStackLayout Grid.Row="0"
+            Spacing="25">
+
+                <Label Text="FlipView with picture" FontAttributes="Bold" FontSize="Subtitle"/>
+                <flipView:FlipContentView IsFlipped="{Binding IsImageFlipped}">
+                    <flipView:FlipContentView.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding FlipImageCommand}"/>
+                    </flipView:FlipContentView.GestureRecognizers>
+                    <Image
+                    Source="dotnet_bot.png"
+                    HeightRequest="100"
+                    Aspect="AspectFit"
+                    SemanticProperties.Description="dot net bot in a race car number eight" />
+                    <flipView:FlipContentView.BackView>
+                        <Image
+                        Source="dotnet_bot2.png"
+                        HeightRequest="100"
+                        Aspect="AspectFit" RotationY="180"
+                        SemanticProperties.Description="dot net bot in a race car number eight" />
+                    </flipView:FlipContentView.BackView>
+                </flipView:FlipContentView>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Row="1"
+            Spacing="25">
+                <Label Text="FlipView with frame" FontAttributes="Bold" FontSize="Subtitle"/>
+
+
+                <flipView:FlipContentView IsFlipped="{Binding IsFrameFlipped}" Padding="0" FlipDirection="TopToBottom">
+                    <Frame >
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding FlipFrameCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout>
+                            <Label Text="Frontview"/>
+                            <Label Text="Click the frame to flip!"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <flipView:FlipContentView.BackView>
+                        <Frame >
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding FlipFrameCommand}"/>
+                            </Frame.GestureRecognizers>
+                            <VerticalStackLayout>
+                                <Label Text="Backview"/>
+                                <Label Text="Click the frame to flip!"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </flipView:FlipContentView.BackView>
+                </flipView:FlipContentView>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Row="2"
+            Spacing="25">
+                <Label Text="FlipView with some other controls" FontAttributes="Bold" FontSize="Subtitle"/>
+                <flipView:FlipContentView IsFlipped="{Binding IsControlsFlipped}" 
+                                      FlipDirection="{Binding FlipDirection}">
+                    <VerticalStackLayout>
+                        <Picker ItemsSource="{Binding FlipDirections}" SelectedItem="{Binding FlipDirection}">
+                        </Picker>
+                        <Button Text="Flip me" Command="{Binding FlipControls}"/>
+                    </VerticalStackLayout>
+
+                    <flipView:FlipContentView.BackView>
+                        <Button Text="Flip me back!" Command="{Binding FlipControls}"/>
+                    </flipView:FlipContentView.BackView>
+                </flipView:FlipContentView>
+
+            </VerticalStackLayout>
+
+            <Button Grid.Row="3"
+                Text="Flip all" Command="{Binding FlipAllCommand}"
+                HorizontalOptions="Fill" />
+        </Grid>
+
+
+    </ScrollView>
+</ContentPage>
