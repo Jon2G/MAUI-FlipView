@@ -68,7 +68,8 @@ namespace FlipView
 
         public IView? BackView
         {
-            get => (IView?)GetValue(BackViewProperty); set => SetValue(BackViewProperty, value);
+            get => (IView?)GetValue(BackViewProperty); 
+            set => SetValue(BackViewProperty, value);
         }
 
         public new IView? Content
