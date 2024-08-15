@@ -1,5 +1,8 @@
-﻿using Microsoft.Maui.Controls;
+﻿using AsyncAwaitBestPractices;
+using Microsoft.Maui.Controls;
 using System.Windows.Input;
+using System.ComponentModel;
+
 
 namespace FlipView
 {
@@ -19,7 +22,6 @@ namespace FlipView
         }
     }
 
-    [ContentProperty(nameof(Content))]
     public class FlipContentView : ContentView
     {
 
@@ -48,7 +50,7 @@ namespace FlipView
 
         public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(FlipContentView));
 
-        readonly WeakEventManager tappedEventManager = new();
+        readonly Microsoft.Maui.WeakEventManager tappedEventManager = new();
 
         public event EventHandler<EventArgs> ExpandedChanged
         {
@@ -107,15 +109,17 @@ namespace FlipView
         static void OnBackViewPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var flipView = (FlipContentView)bindable;
-            if (newValue is View view)
+            View? newView = newValue as View;
+            if (newView is not null)
             {
-                view.SetBinding(IsVisibleProperty, new Binding(nameof(IsFlipped), source: bindable));
+                newView.SetBinding(IsVisibleProperty, new Binding(nameof(IsFlipped), source: bindable));
             }
-            if (oldValue != null)
+            if (oldValue is View oldView)
             {
-                flipView.ContentGrid.Remove(oldValue as IView);
+                oldView.RemoveBinding(IsVisibleProperty);
+                flipView.ContentGrid.Remove(oldView as IView);
             }
-            flipView.ContentGrid.Add(newValue as IView);
+            flipView.ContentGrid.Add(newView as IView);
         }
 
         static void OnlsFlippedPropertyChanged(BindableObject bindable, object oldValue, object newValue)
@@ -127,11 +131,11 @@ namespace FlipView
         {
             if (isFlipped)
             {
-                FlipToBack();//.SafeFireAndForget();
+                FlipToBack().SafeFireAndForget();
             }
             else
             {
-                FlipToFront();//.SafeFireAndForget();
+                FlipToFront().SafeFireAndForget();
             }
             if (Command?.CanExecute(CommandParameter) is true)
             {
