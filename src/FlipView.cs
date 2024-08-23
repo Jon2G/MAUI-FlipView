@@ -1,54 +1,60 @@
-﻿using AsyncAwaitBestPractices;
-using Microsoft.Maui.Controls;
+﻿using System.ComponentModel;
 using System.Windows.Input;
-using System.ComponentModel;
-
+using Microsoft.Maui.Controls;
 
 namespace FlipView
 {
-    public enum FlipDirection
-    {
-        LeftToRight,
-        RightToLeft,
-        TopToBottom,
-        BottomToTop
-    }
-    public class FlippedChangedEventArgs : EventArgs
-    {
-        public bool Flipped { get; }
-        public FlippedChangedEventArgs(bool flipped)
-        {
-            Flipped = flipped;
-        }
-    }
-
     public class FlipContentView : ContentView
     {
+        public static readonly BindableProperty BackViewProperty = BindableProperty.Create(
+            nameof(BackView),
+            typeof(IView),
+            typeof(FlipContentView),
+            propertyChanged: OnBackViewPropertyChanged
+        );
 
-        public static readonly BindableProperty BackViewProperty = BindableProperty.Create(nameof(BackView), typeof(IView), typeof(FlipContentView), propertyChanged: OnBackViewPropertyChanged);
+        public static new readonly BindableProperty ContentProperty = BindableProperty.Create(
+            nameof(Content),
+            typeof(IView),
+            typeof(FlipContentView),
+            propertyChanged: OnContentPropertyChanged
+        );
 
-        public static new readonly BindableProperty ContentProperty = BindableProperty.Create(nameof(Content), typeof(IView), typeof(FlipContentView), propertyChanged: OnContentPropertyChanged);
+        public static readonly BindableProperty IsFlippedProperty = BindableProperty.Create(
+            nameof(IsFlipped),
+            typeof(bool),
+            typeof(FlipContentView),
+            false,
+            Microsoft.Maui.Controls.BindingMode.TwoWay,
+            propertyChanged: OnlsFlippedPropertyChanged
+        );
 
-        public static readonly BindableProperty IsFlippedProperty = BindableProperty.Create(nameof(IsFlipped), typeof(bool), typeof(FlipContentView), false, Microsoft.Maui.Controls.BindingMode.TwoWay, propertyChanged: OnlsFlippedPropertyChanged);
-
-
-        public static readonly BindableProperty FlipDirectionProperty = BindableProperty.Create(nameof(FlipDirection), typeof(FlipDirection), typeof(FlipContentView), FlipDirection.LeftToRight);
+        public static readonly BindableProperty FlipDirectionProperty = BindableProperty.Create(
+            nameof(FlipDirection),
+            typeof(FlipDirection),
+            typeof(FlipContentView),
+            FlipDirection.LeftToRight
+        );
 
         /// <summary>
-
         /// Backing BindableProperty for the <see cref="CommandParameter"/> property.
-
         /// </summary>
 
-        public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(FlipContentView));
+        public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(
+            nameof(CommandParameter),
+            typeof(object),
+            typeof(FlipContentView)
+        );
 
         /// <summary>
-
         /// Backing BindableProperty for the <see cref="Command"/> property.
-
         /// </summary>
 
-        public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(FlipContentView));
+        public static readonly BindableProperty CommandProperty = BindableProperty.Create(
+            nameof(Command),
+            typeof(ICommand),
+            typeof(FlipContentView)
+        );
 
         readonly Microsoft.Maui.WeakEventManager tappedEventManager = new();
 
@@ -60,17 +66,19 @@ namespace FlipView
 
         public object? CommandParameter
         {
-            get => GetValue(CommandParameterProperty); set => SetValue(CommandParameterProperty, value);
+            get => GetValue(CommandParameterProperty);
+            set => SetValue(CommandParameterProperty, value);
         }
 
         public ICommand? Command
         {
-            get => (ICommand?)GetValue(CommandProperty); set => SetValue(CommandProperty, value);
+            get => (ICommand?)GetValue(CommandProperty);
+            set => SetValue(CommandProperty, value);
         }
 
         public IView? BackView
         {
-            get => (IView?)GetValue(BackViewProperty); 
+            get => (IView?)GetValue(BackViewProperty);
             set => SetValue(BackViewProperty, value);
         }
 
@@ -92,7 +100,11 @@ namespace FlipView
             set => SetValue(FlipDirectionProperty, value);
         }
 
-        static void OnContentPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        static void OnContentPropertyChanged(
+            BindableObject bindable,
+            object oldValue,
+            object newValue
+        )
         {
             var flipView = (FlipContentView)bindable;
             if (newValue is View view)
@@ -106,13 +118,20 @@ namespace FlipView
             }
         }
 
-        static void OnBackViewPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        static void OnBackViewPropertyChanged(
+            BindableObject bindable,
+            object oldValue,
+            object newValue
+        )
         {
             var flipView = (FlipContentView)bindable;
             View? newView = newValue as View;
             if (newView is not null)
             {
-                newView.SetBinding(IsVisibleProperty, new Binding(nameof(IsFlipped), source: bindable));
+                newView.SetBinding(
+                    IsVisibleProperty,
+                    new Binding(nameof(IsFlipped), source: bindable)
+                );
             }
             if (oldValue is View oldView)
             {
@@ -122,7 +141,11 @@ namespace FlipView
             flipView.ContentGrid.Add(newView as IView);
         }
 
-        static void OnlsFlippedPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        static void OnlsFlippedPropertyChanged(
+            BindableObject bindable,
+            object oldValue,
+            object newValue
+        )
         {
             ((FlipContentView)bindable).FlippedChanged(((FlipContentView)bindable).IsFlipped);
         }
@@ -131,28 +154,34 @@ namespace FlipView
         {
             if (isFlipped)
             {
-                FlipToBack().SafeFireAndForget();
+                FlipToBack().ConfigureAwait(continueOnCapturedContext: true);
             }
             else
             {
-                FlipToFront().SafeFireAndForget();
+                FlipToFront().ConfigureAwait(continueOnCapturedContext: true);
             }
             if (Command?.CanExecute(CommandParameter) is true)
             {
                 Command.Execute(CommandParameter);
             }
-            tappedEventManager.HandleEvent(this, new FlippedChangedEventArgs(isFlipped), nameof(FlippedChanged));
+            tappedEventManager.HandleEvent(
+                this,
+                new FlippedChangedEventArgs(isFlipped),
+                nameof(FlippedChanged)
+            );
         }
 
         private readonly Grid ContentGrid;
+
         public FlipContentView()
         {
             ContentGrid = new Grid();
             base.Content = ContentGrid;
         }
 
-        private async Task Flip(VisualElement from, VisualElement to)
+        private async Task Flip(VisualElement? from, VisualElement? to)
         {
+            if(from is null || to is null){ return; }
             int rotation = 0;
             switch (this.FlipDirection)
             {
@@ -165,7 +194,10 @@ namespace FlipView
                     rotation = -90;
                     break;
             }
-            if (this.FlipDirection == FlipDirection.LeftToRight || this.FlipDirection == FlipDirection.RightToLeft)
+            if (
+                this.FlipDirection == FlipDirection.LeftToRight
+                || this.FlipDirection == FlipDirection.RightToLeft
+            )
             {
                 await from.RotateYTo(rotation, 600, Easing.SpringIn);
                 to.RotationY = 90;
@@ -177,7 +209,10 @@ namespace FlipView
             }
             to.IsVisible = true;
             from.IsVisible = false;
-            if (this.FlipDirection == FlipDirection.LeftToRight || this.FlipDirection == FlipDirection.RightToLeft)
+            if (
+                this.FlipDirection == FlipDirection.LeftToRight
+                || this.FlipDirection == FlipDirection.RightToLeft
+            )
             {
                 await to.RotateYTo(0, 600, Easing.SpringOut);
             }
@@ -210,7 +245,3 @@ namespace FlipView
         }
     }
 }
-
-
-
-
