@@ -38,12 +38,7 @@
 		</Description>
 		<Copyright>none</Copyright>
 		<Version>1.0.5</Version>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<PackageReference Include="AsyncAwaitBestPractices" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />-->
 		<None Include="..\LICENSE">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
