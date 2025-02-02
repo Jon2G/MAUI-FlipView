@@ -3,17 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlipView", "src\FlipView.csproj", "{800AA4C7-F224-4DEC-8233-E1BFFEC86D85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlipView", "FlipView.csproj", "{800AA4C7-F224-4DEC-8233-E1BFFEC86D85}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{F14F8CA8-0B91-466D-8E1B-6E2CA7DA6FA1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlipViewTest", "Test\FlipViewTest\FlipViewTest.csproj", "{0334654D-0993-4613-8EFD-B550B17D852D}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E7986880-1ACF-49FA-9342-BE3B84F2E66C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlipViewTest", "..\Test\FlipViewTest\FlipViewTest.csproj", "{0334654D-0993-4613-8EFD-B550B17D852D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7DCA261F-1F0D-4E72-A086-EF50C5B4F90C}"
 	ProjectSection(SolutionItems) = preProject
 		LICENSE = LICENSE
+		..\nuget_icon.png = ..\nuget_icon.png
 		README.md = README.md
 		sample.gif = sample.gif
 	EndProjectSection
@@ -75,7 +74,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{800AA4C7-F224-4DEC-8233-E1BFFEC86D85} = {E7986880-1ACF-49FA-9342-BE3B84F2E66C}
 		{0334654D-0993-4613-8EFD-B550B17D852D} = {F14F8CA8-0B91-466D-8E1B-6E2CA7DA6FA1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
